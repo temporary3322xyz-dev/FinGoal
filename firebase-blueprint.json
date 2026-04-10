@@ -1,0 +1,78 @@
+{
+  "entities": {
+    "userProfile": {
+      "title": "User Profile",
+      "description": "Stores user-specific financial settings and metadata.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "monthlyIncome": { "type": "number", "description": "User's total monthly income" },
+        "currency": { "type": "string", "enum": ["USD", "INR", "EUR", "GBP"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "monthlyIncome"]
+    },
+    "transaction": {
+      "title": "Financial Transaction",
+      "description": "Represents an income or expense entry.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "amount": { "type": "number" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["income", "expense"] },
+        "date": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "amount", "type", "date"]
+    },
+    "goal": {
+      "title": "Financial Goal",
+      "description": "A savings goal like a car, house, or gadget.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "title": { "type": "string" },
+        "targetAmount": { "type": "number" },
+        "currentAmount": { "type": "number" },
+        "deadline": { "type": "string", "format": "date-time" },
+        "category": { "type": "string" }
+      },
+      "required": ["uid", "title", "targetAmount", "deadline"]
+    },
+    "aiInsight": {
+      "title": "AI Insight",
+      "description": "AI-generated financial summary and suggestions.",
+      "type": "object",
+      "properties": {
+        "summary": { "type": "string" },
+        "riskLevel": { "type": "string", "enum": ["Low", "Medium", "High"] },
+        "riskReason": { "type": "string" },
+        "suggestions": { "type": "array" },
+        "goalFeasibility": { "type": "array" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["summary", "riskLevel", "riskReason"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "userProfile",
+      "description": "User profile document"
+    },
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": "transaction",
+      "description": "User's income and expense transactions"
+    },
+    "/users/{userId}/goals/{goalId}": {
+      "schema": "goal",
+      "description": "User's financial goals"
+    },
+    "/users/{userId}/ai_data/{insightId}": {
+      "schema": "aiInsight",
+      "description": "AI-generated financial insights"
+    }
+  }
+}
